@@ -1,5 +1,41 @@
 <template>
   <div>{{ msg }}</div>
+  <table class="add">
+    <tr>
+      <th>상품명</th>
+      <td><input type="text" v-model="prod_name" /></td>
+    </tr>
+    <tr>
+      <th>가격</th>
+      <td><input type="text" v-model="prod_price" /></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="'center'">
+        <button @click="registProd">상품등록</button>
+      </td>
+    </tr>
+  </table>
+
+  <table class="list">
+    <thead>
+      <tr>
+        <th>상품번호</th>
+        <th>상품명</th>
+        <th>가격</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr :key="i" v-for="(elem, i) in prodList">
+        <td>{{ elem.id }}</td>
+        <td>{{ elem.product_name }}</td>
+        <td>{{ elem.product_price }}</td>
+        <td>
+          {{ `${elem.category1} / ${elem.category2} / ${elem.category3}` }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 <script>
 import axios from "axios";
@@ -7,6 +43,8 @@ export default {
   data() {
     return {
       msg: "Axios 연습",
+      prod_name: "",
+      prod_price: 1000,
       prodList: [],
     };
   },
@@ -18,11 +56,50 @@ export default {
       );
       return response.data;
     },
+    async registProd() {
+      let product = {
+        product_name: this.prod_name,
+        product_price: this.prod_price,
+        seller_id: 1,
+        category_id: 1,
+      };
+      let response = await axios.post(
+        "http://localhost:3000/api/productInsert",
+        { param: [product] }
+      );
+      response = await this.getProdList(); // 목록을 가져오는 메소드 호출
+      console.log(response);
+      this.prodList = response; //상품목록을 보여주는 배열에 값을 저장
+    },
   },
   mounted() {
-    this.prodList = this.getProdList();
-    console.log(this.prodList);
+    this.getProdList().then((result) => {
+      this.prodList = result;
+      // console.log(result);
+
+      // console.log(this.prodList);
+    });
   },
 };
 </script>
-<style></style>
+<style>
+table.add {
+  width: 70%;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+.add th,
+.add td {
+  border: 2px solid pink;
+}
+table.list {
+  width: 100%;
+  margin: auto;
+  border-collapse: collapse;
+}
+.list th,
+.list td {
+  border: 2px solid green;
+}
+</style>
