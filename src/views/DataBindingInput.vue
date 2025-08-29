@@ -60,6 +60,12 @@ export default {
       }
     },
   },
+  beforeUpdate() {
+    console.log("beforeUpdate");
+  },
+  updated() {
+    console.log("updated");
+  },
 };
 </script>
 

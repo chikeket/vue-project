@@ -48,9 +48,24 @@ export default {
       prodList: [],
     };
   },
+  beforeCreate() {
+    console.log("beforeCreate");
+  },
+  created() {
+    console.log("created");
+  },
+  beforeMount() {
+    console.log("beforeMount");
+  },
+  beforeUpdate() {
+    console.log("beforeUpdate");
+  },
+  updated() {
+    console.log("updated");
+  },
   mounted() {
     // DataBindingList 컴포넌트가 생성이 되면
-    fetch("http://192.168.0.83:3000/products")
+    fetch("http://192.168.0.8:3000/products")
       .then((resopnse) => resopnse.json())
       .then((result) => {
         console.log(result);
